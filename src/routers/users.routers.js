@@ -6,12 +6,43 @@ import authMiddleware from '../middlewares/auth.middleware.js';
 import { requireRefreshToken } from '../middlewares/require-refresh-token.middleware.js';
 import { HTTP_STATUS } from '../constants/http-status.constant.js';
 import {ACCESS_TOKEN_SECRET_KEY, REFRESH_TOKEN_SECRET_KEY} from '../constants/env.constant.js'
-
+import { UsersController } from '../controllers/users.controller.js';
 const router = express.Router();
-// router.get('/token', async(req, res, next)=>{
-//   return res.status(200).json({message: '이게 맞는가?',})
-  
-// })
+
+//내 정보 조회 API
+
+const usersController = new UsersController(); // UsersController 인스터화 시킨다.
+
+ router.get('/users',authMiddleware, usersController.getUser);
+// router.get('/users', authMiddleware, async (req, res, next) => {
+//   try {
+//     const { userId } = req.user;
+
+//     const user = await prisma.users.findFirst({
+//       where: { userId: +userId },
+//       select: {
+//         userId: true,
+//         email: true,
+//         name: true,
+//         role: true,
+//         createdAt: true,
+//         updatedAt: true,
+//       },
+//     });
+
+//     return res.status(HTTP_STATUS.OK).json({status:HTTP_STATUS.OK, data: user });
+//   } catch (err) {
+//     next(err);
+//   }
+// });
+
+
+
+
+
+
+
+
 //refresh토큰 재발급 
 router.post('/token',requireRefreshToken, async(req, res, next)=>{
   try{
@@ -58,30 +89,6 @@ router.post('/token',requireRefreshToken, async(req, res, next)=>{
  
  })
  
-
-//내 정보 조회 API
-router.get('/users', authMiddleware, async (req, res, next) => {
-  try {
-    const { userId } = req.user;
-
-    const user = await prisma.users.findFirst({
-      where: { userId: +userId },
-      select: {
-        userId: true,
-        email: true,
-        name: true,
-        role: true,
-        createdAt: true,
-        updatedAt: true,
-      },
-    });
-
-    return res.status(HTTP_STATUS.OK).json({status:HTTP_STATUS.OK, data: user });
-  } catch (err) {
-    next(err);
-  }
-});
-
 
 
 
