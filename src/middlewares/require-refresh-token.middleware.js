@@ -4,7 +4,6 @@ import jwt from 'jsonwebtoken';
 import { prisma } from '../utils/prisma.util.js';
 import bcrypt from 'bcrypt';
 
-
 export const requireRefreshToken = async(req, res, next)=>{
     try{
         //인증정보 파싱 (req.headers.authorization을 가지고오겠다)

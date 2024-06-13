@@ -1,8 +1,6 @@
 import express from 'express';
 import { prisma } from '../utils/prisma.util.js';
 import { requireRefreshToken } from '../middlewares/require-refresh-token.middleware.js';
-import { HTTP_STATUS } from '../constants/http-status.constant.js';
-import {ACCESS_TOKEN_SECRET_KEY, REFRESH_TOKEN_SECRET_KEY} from '../constants/env.constant.js'
 import {AuthController} from "../controllers/auth.controller.js";
 import { RegisterValidator } from '../validators/register.validator.js';
 import { LoginValidator } from '../validators/login.validator.js';

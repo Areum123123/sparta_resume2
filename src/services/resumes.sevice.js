@@ -11,7 +11,7 @@ export class ResumesService{
 
         return {
               resumeId: createdResume.resumeId,
-              userId : createdResume.userId, //안되면 createdResume 붙이기
+              userId : createdResume.UserId, //
               title: createdResume.title,
               introduction : createdResume.introduction,
               status : createdResume.status,

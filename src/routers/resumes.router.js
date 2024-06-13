@@ -3,6 +3,7 @@ import { prisma } from '../utils/prisma.util.js';
 import { HTTP_STATUS } from '../constants/http-status.constant.js';
 import { requireRoles } from '../middlewares/require-roles.middleware.js';
 import {ResumesController}  from '../controllers/resumes.controller.js';;
+import { ResumeValidator } from '../validators/resume.validator.js'; 
 
 
 const resumesRouter = express.Router();
@@ -11,45 +12,8 @@ const resumesRouter = express.Router();
 // 인스턴스 생성
 const resumesController = new ResumesController(); //ResumesController 인스턴스화 시킨다.
 /* 이력서 생성 API */
- resumesRouter.post('/', resumesController.createResume);
- // resumesRouter.post('/', async (req, res, next) => {
-//   const { userId } = req.user;
-//   const { title, introduction } = req.body;
-//   //제목,자기소개입력
-//   if (!title || !introduction) {
-//     const missingFields = [];
-//     if (!title) {
-//       missingFields.push('제목');
-//     }
-//     if (!introduction) {
-//       missingFields.push('자기소개');
-//     }
-//     return res
-//       .status(HTTP_STATUS.BAD_REQUEST)
-//       .json({ status: HTTP_STATUS.BAD_REQUEST, message: `${missingFields}을(를) 입력해주세요.` });
-//   }
-//   //자기소개150자
-//   if (introduction.length < 150) {
-//     return res
-//       .status(HTTP_STATUS.BAD_REQUEST)
-//       .json({ status: HTTP_STATUS.BAD_REQUEST, message: '자기소개는 150자 이상 작성해야 합니다.' });
-//   }
-//   //이력서생성
-//   try {
-//     const resume = await prisma.resumes.create({
-//       data: {
-//         UserId: +userId,
-//         title,
-//         introduction,
-//       },
-//     });
-
-//     return res.status(HTTP_STATUS.CREATE).json({ data: resume });
-//   } catch (err) {
-//     next(err);
-//   }
-// });
-
+ resumesRouter.post('/', ResumeValidator, resumesController.createResume);
+ 
 /*이력서 목록 조회 API(accessToken인증)*/
 resumesRouter.get('/',  async (req, res, next) => {
   const { userId, role } = req.user;

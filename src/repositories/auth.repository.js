@@ -16,7 +16,6 @@ export class AuthRepository {
 
  findUserByEmail = async(email)=>{
 
-     // 이메일로 사용자 조회
      const user = await prisma.users.findFirst({
         where: { email },
         select: {
