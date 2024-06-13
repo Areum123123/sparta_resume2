@@ -7,10 +7,10 @@ import {ResumesController}  from '../controllers/resumes.controller.js';;
 
 const resumesRouter = express.Router();
 
-/* 이력서 생성 API */
 
+// 인스턴스 생성
 const resumesController = new ResumesController(); //ResumesController 인스턴스화 시킨다.
-
+/* 이력서 생성 API */
  resumesRouter.post('/', resumesController.createResume);
  // resumesRouter.post('/', async (req, res, next) => {
 //   const { userId } = req.user;

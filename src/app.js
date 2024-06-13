@@ -4,7 +4,7 @@ import { errorHandler } from './middlewares/error-handler.middleware.js';
 import UsersRouter from './routers/users.routers.js';
 import { PORT_NUMBER } from './constants/env.constant.js';
 import { HTTP_STATUS } from './constants/http-status.constant.js';
-import { apiRouter } from './routers/index.js';
+import  apiRouter  from './routers/index.js';
 
 const app = express();
 const PORT = PORT_NUMBER;

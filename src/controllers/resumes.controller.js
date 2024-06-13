@@ -1,13 +1,19 @@
 import { ResumesService } from "../services/resumes.sevice.js";
+
 export class ResumesController{
-   
+  resumesService = new ResumesService();
 // 이력서 생성 API
  createResume = async(req, res, next) =>{
-   resumesService = new ResumesService();
-
+   
     try{
-        const { userId } = req.user;
-        const { title, introduction } = req.body;
+       const { title, introduction } = req.body;
+        const { userId }= req.user;
+        
+
+        console.log(title)
+        console.log(introduction)
+        console.log(userId)
+
         const createdResume = await this.resumesService.createResume(
           userId, title, introduction 
         );
