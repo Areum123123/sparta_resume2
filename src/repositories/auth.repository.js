@@ -31,7 +31,14 @@ export class AuthRepository {
       });
   
       return user;
-
  }
     
+ logout = async(userId)=>{
+   await prisma.refreshToken.update({
+    where:{UserId:+userId},
+    data:{
+      refreshToken :null,
+    }
+  })
+ }
 }

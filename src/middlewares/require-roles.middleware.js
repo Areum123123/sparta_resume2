@@ -23,8 +23,3 @@ export const requireRoles =(roles)=>{
     }
 }
 
-//위에 코드를 가지고 이력서 지원 상태 변경 API 를 만든다.
-
-// function require(roles){
-// return (req, res, next) =>{}
-// }

@@ -19,8 +19,22 @@ authRouter.post('/login',LoginValidator, authController.login);
 
 
 
-   //로그아웃 API
-   authRouter.post('/sign-out', requireRefreshToken, async(req, res, next)=>{
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//로그아웃 API 
+authRouter.post('/sign-out', requireRefreshToken, async(req, res, next)=>{
      try{
        const user = req.user;
        //refreshToken 로그아웃시 Null 값
@@ -41,9 +55,7 @@ authRouter.post('/login',LoginValidator, authController.login);
      }
    })
    
-  
-  //  res.header('authorization', `Bearer ${accessToken}`); //헤더로 전달
-  //   res.header('refreshToken', `Bearer ${refreshToken}`);
+
    
     
 

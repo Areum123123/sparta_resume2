@@ -14,33 +14,6 @@ const router = express.Router();
 const usersController = new UsersController(); // UsersController 인스터화 시킨다.
 
  router.get('/users',authMiddleware, usersController.getUser);
-// router.get('/users', authMiddleware, async (req, res, next) => {
-//   try {
-//     const { userId } = req.user;
-
-//     const user = await prisma.users.findFirst({
-//       where: { userId: +userId },
-//       select: {
-//         userId: true,
-//         email: true,
-//         name: true,
-//         role: true,
-//         createdAt: true,
-//         updatedAt: true,
-//       },
-//     });
-
-//     return res.status(HTTP_STATUS.OK).json({status:HTTP_STATUS.OK, data: user });
-//   } catch (err) {
-//     next(err);
-//   }
-// });
-
-
-
-
-
-
 
 
 //refresh토큰 재발급 

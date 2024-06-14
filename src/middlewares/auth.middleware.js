@@ -13,8 +13,7 @@ export default async function (req, res, next) {
     const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET_KEY);
    //사용자 ID 와 일치하는 사용자가 없는 경우
     const userId = decodedToken.userId;
-    //const {userId}=decodedToken 으로 사용할수도 있음.
-
+    
     const user = await prisma.users.findFirst({
       where: { userId: +userId },
     });

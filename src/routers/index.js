@@ -9,5 +9,4 @@ apiRouter.use('/auth', authRouter)
 apiRouter.use('/resumes',authMiddleware ,resumesRouter);
 
 
-// export {apiRouter};
 export default apiRouter

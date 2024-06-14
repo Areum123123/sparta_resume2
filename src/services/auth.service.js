@@ -5,8 +5,8 @@ import {ACCESS_TOKEN_SECRET_KEY, REFRESH_TOKEN_SECRET_KEY} from "../constants/en
 
 export class AuthService{
     authRepository = new AuthRepository();
-    //회원가입
     
+    //회원가입
     register =async(  email, password, name  ) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -55,7 +55,6 @@ export class AuthService{
           }
         };
 
-  
 
     }
 
