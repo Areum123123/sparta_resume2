@@ -1,4 +1,5 @@
 import { AuthService } from "../services/auth.service.js";
+import { HTTP_STATUS } from "../constants/http-status.constant.js";
 
 export class AuthController{
     authService = new AuthService();
@@ -8,7 +9,7 @@ export class AuthController{
         const { email, password, name } = req.body;
         const registered = await this.authService.register(email, password, name );
 
-     return res.status(201).json({data : registered});
+     return res.status(HTTP_STATUS.CREATE).json({data : registered});
       }catch(err){
         next(err);
       }
@@ -23,10 +24,26 @@ export class AuthController{
         res.header('accessToken', accessToken);
         res.header('refreshToken', refreshToken);
 
-        return res.status(200).json({ accessToken, refreshToken });
+        return res.status(HTTP_STATUS.OK).json({ accessToken, refreshToken });
   }catch(err){
     next(err)
   }
     }
+//refreshToken재발급
+  refreshToken = async (req, res, next) => {
+    try {
+      const user = req.user; // 미들웨어 인증받은 user
+ 
+       const tokens = await this.authService.generateTokens(user);
+
+      return res.status(200).json({
+        status: 200,
+        message: '토큰 재발급에 성공했습니다.',
+        data: { tokens },
+      });
+    } catch (err) {
+      next(err);
+    }
+  } 
 
 }

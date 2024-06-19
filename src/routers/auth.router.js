@@ -16,6 +16,11 @@ authRouter.post('/register',RegisterValidator, authController.register);
 //로그인 API
 authRouter.post('/login',LoginValidator, authController.login);
 
+//refresh토큰 재발급 
+authRouter.post('/token',requireRefreshToken, authController.refreshToken);
+ 
+export default authRouter;
+
 
 
 

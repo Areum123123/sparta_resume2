@@ -37,8 +37,23 @@ export class AuthRepository {
    await prisma.refreshToken.update({
     where:{UserId:+userId},
     data:{
-      refreshToken :null,
+      refresh_token :null,
     }
   })
  }
+
+ upsertRefreshToken = async(userId, hashedRefreshToken)=>{
+  await prisma.refreshToken.upsert({
+  where: { UserId: userId},
+  update: {
+    refresh_token: hashedRefreshToken,
+  },
+  create: {
+    UserId: userId,
+    refresh_token: hashedRefreshToken,
+  }
+});
+ }
+ 
+
 }
