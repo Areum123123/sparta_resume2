@@ -6,6 +6,7 @@ import { PORT_NUMBER } from './constants/env.constant.js';
 import { HTTP_STATUS } from './constants/http-status.constant.js';
 import  apiRouter  from './routers/index.js';
 import postsRouter from './routers/posts.router.js';
+import commentsRouter from "./routers/comments.router.js"
 
 const app = express();
 const PORT = PORT_NUMBER;
@@ -19,7 +20,7 @@ app.get('/', (req, res) => {
    return res.status(HTTP_STATUS.OK).send('서버가 실행중')
 })
 
-app.use('/api', [apiRouter,UsersRouter,postsRouter]);
+app.use('/api', [apiRouter,UsersRouter,postsRouter,commentsRouter]);
 
 app.use(errorHandler); //error미들웨어
 

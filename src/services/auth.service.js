@@ -18,6 +18,19 @@ register =async(  email, password, name  ) => {
         return registered;   
     };
  
+// 이메일 인증
+verifyEmail = async (token) => {
+  const user = await this.authRepository.findByVerificationToken(token);
+  if (!user) {
+    return false;
+  }
+  
+  await this.authRepository.verifyEmail(user.userId);
+  return true;
+}
+
+
+
     //로그인
 login = async(email, password)=>{
   try {

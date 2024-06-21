@@ -1,9 +1,9 @@
 import express from 'express';
-import { prisma } from '../utils/prisma.util.js';
 import { requireRefreshToken } from '../middlewares/require-refresh-token.middleware.js';
 import {AuthController} from "../controllers/auth.controller.js";
 import { RegisterValidator } from '../validators/register.validator.js';
 import { LoginValidator } from '../validators/login.validator.js';
+// import { prisma } from '../utils/prisma.util.js';
 
 const authRouter = express.Router();
 
@@ -13,13 +13,16 @@ const authController = new AuthController();
 //회원가입 API 
 authRouter.post('/register',RegisterValidator, authController.register);
 
+//회원가입 이메일 인증 API
+authRouter.get('/verify-email', authController.verifyEmail);
+
 //로그인 API
 authRouter.post('/login',LoginValidator, authController.login);
 
 //refresh토큰 재발급 
 authRouter.post('/token',requireRefreshToken, authController.refreshToken);
  
-export default authRouter;
+
 
 
 
@@ -66,4 +69,4 @@ authRouter.post('/sign-out', requireRefreshToken, async(req, res, next)=>{
 
 
 
-export {authRouter};
+   export default authRouter;
