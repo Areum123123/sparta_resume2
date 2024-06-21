@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+import { sendVerificationEmail } from '../utils/email.js';
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { AuthRepository } from "../repositories/auth.repository.js" 
@@ -9,26 +11,19 @@ export class AuthService{
   authRepository = new AuthRepository();
     
     //회원가입
-register =async(  email, password, name  ) => {
-
-   const hashedPassword = await bcrypt.hash(password, 10);
-   const registered = await this.authRepository.register( email, hashedPassword, name );
-
-       delete registered.password;
-        return registered;   
+    register = async (email, password, name) => {
+      try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+      
+    const registered = await this.authRepository.register(email, hashedPassword, name);
+        
+    
+        return { message: '회원가입이 완료되었습니다.',data:`아이디:${registered.userId }` };
+      } catch (err) {
+        throw err;
+      }
     };
  
-// 이메일 인증
-verifyEmail = async (token) => {
-  const user = await this.authRepository.findByVerificationToken(token);
-  if (!user) {
-    return false;
-  }
-  
-  await this.authRepository.verifyEmail(user.userId);
-  return true;
-}
-
 
 
     //로그인

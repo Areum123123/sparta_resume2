@@ -1,6 +1,7 @@
 import { AuthService } from "../services/auth.service.js";
 import { HTTP_STATUS } from "../constants/http-status.constant.js";
 
+
 export class AuthController{
     authService = new AuthService();
 //회원가입
@@ -8,7 +9,7 @@ export class AuthController{
       try{
         const { email, password, name } = req.body;
         const registered = await this.authService.register(email, password, name );
-
+    
      return res.status(HTTP_STATUS.CREATE).json({data : registered});
       }catch(err){
         next(err);
@@ -16,20 +17,6 @@ export class AuthController{
 
     }
 
- // 이메일 인증
-verifyEmail = async(req, res, next) => {
-  try {
-    const { token } = req.query;
-    const verified = await this.authService.verifyEmail(token);
-    if (verified) {
-      return res.status(HTTP_STATUS.OK).json({ message: 'Email verified successfully' });
-    } else {
-      return res.status(HTTP_STATUS.BAD_REQUEST).json({ message: 'Invalid or expired token' });
-    }
-  } catch(err) {
-    next(err);
-  }
-}
    
  //로그인
     login = async(req, res, next)=>{    
