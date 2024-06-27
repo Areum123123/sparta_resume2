@@ -2,6 +2,7 @@ import { AuthService } from "../services/auth.service.js";
 import { HTTP_STATUS } from "../constants/http-status.constant.js";
 
 
+
 export class AuthController{
     authService = new AuthService();
 //회원가입
@@ -10,7 +11,7 @@ export class AuthController{
         const { email, password, name } = req.body;
         const registered = await this.authService.register(email, password, name );
     
-     return res.status(HTTP_STATUS.CREATE).json({data : registered});
+     return res.status(HTTP_STATUS.CREATE).json({status: HTTP_STATUS.CREATE, data : registered});
       }catch(err){
         next(err);
       }
@@ -49,4 +50,58 @@ export class AuthController{
     }
   } 
 
+// //이메일 인증 확인
+// verifyEmail = async(req,res,next)=>{
+//   try{
+//     const { verificationCode, email } = req.body;
+ 
+ 
+//      const verifyEmail = await this.authService.verifyEmail(verificationCode,email);
+ 
+//      return res.status(HTTP_STATUS.OK).json({data: verifyEmail});
+//   }catch(err){
+//    next(err);
+//   }
+    
+//    }
+ //이메일인증
+//   verifyEmail = async(req,res,next)=>{
+//  try{
+//    const { verificationCode } = req.body;
+//     const {email} = req.params;
+
+//     const verifyEmail = await this.authService.verifyEmail(verificationCode,email);
+
+//     return res.status(HTTP_STATUS.OK).json({data: verifyEmail});
+//  }catch(err){
+//   next(err);
+//  }
+   
+//   }
+verifyEmail = async (req, res, next) => {
+  try {
+    const { verificationCode, email } = req.body;
+    // const { email } = req.params;
+
+    const result = await this.authService.verifyEmail(verificationCode, email);
+
+    return res.status(result.status).json({ message: result.message });
+  } catch (err) {
+    next(err);
+  }
+};
+
+
+deleteUser = async (req, res, next) => {
+  const userId = parseInt(req.params.userId);
+
+  try {
+    await this.authService.deleteUser(userId);
+    
+    return res.status(200).json({ message: '사용자가 성공적으로 탈퇴되었습니다.' });
+  } catch (error) {
+    console.error('사용자 삭제 중 오류 발생:', error);
+    return res.status(500).json({ error: '사용자 삭제 중 오류가 발생했습니다.' });
+  }
+}
 }

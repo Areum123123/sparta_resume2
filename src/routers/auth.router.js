@@ -5,9 +5,17 @@ import { RegisterValidator } from '../validators/register.validator.js';
 import { LoginValidator } from '../validators/login.validator.js';
 import { prisma } from '../utils/prisma.util.js';
 
-const authRouter = express.Router();
 
+const authRouter = express.Router();
 const authController = new AuthController();
+
+// 회원가입 페이지 렌더링
+authRouter.get('/register', (req, res) => {
+  res.render('register');//app.set views 설정 그안에 /register.ejs 폴더
+});
+
+
+
 
 
 //회원가입 API 
@@ -19,26 +27,11 @@ authRouter.post('/login',LoginValidator, authController.login);
 //refresh토큰 재발급 
 authRouter.post('/token',requireRefreshToken, authController.refreshToken);
  
-
+//인증번호 확인후 가입API
+authRouter.post("/register/verify-email/", authController.verifyEmail);
 
 //회원탈퇴
-authRouter.delete('/:userId', async (req, res, next) => {
-  const userId = parseInt(req.params.userId);
-
-  try {
-    // 데이터베이스에서 해당 userId를 가진 사용자 삭제
-    await prisma.users.delete({
-      where: {
-        userId: userId,
-      },
-    });
-
-    return res.status(200).json({ message: '사용자가 성공적으로 탈퇴되었습니다.' });
-  } catch (error) {
-    console.error('사용자 삭제 중 오류 발생:', error);
-    return res.status(500).json({ error: '사용자 삭제 중 오류가 발생했습니다.' });
-  }
-});
+authRouter.delete('/:userId', authController.deleteUser);
 
 
 

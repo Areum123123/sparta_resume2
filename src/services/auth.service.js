@@ -1,5 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
-import { sendVerificationEmail } from '../utils/email.js';
+
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { AuthRepository } from "../repositories/auth.repository.js" 
@@ -17,8 +16,8 @@ export class AuthService{
       
     const registered = await this.authRepository.register(email, hashedPassword, name);
         
-    
-        return { message: '회원가입이 완료되었습니다.',data:`아이디:${registered.userId }` };
+  
+        return { message: '회원 가입 요청이 성공적으로 처리되었습니다. 이메일을 확인해주세요.' };
       } catch (err) {
         throw err;
       }
@@ -104,6 +103,61 @@ login = async(email, password)=>{
   await this.authRepository.upsertRefreshToken(user.userId, hashedRefreshToken);
   return {accessToken, refreshToken}
   
+  }
+
+  verifyEmail = async (verificationCode, email) => {
+    try {
+      const record = await this.authRepository.findLatestEmailRecord(email);
+      if (!record || record.verificationCode !== parseInt(verificationCode, 10)) {
+        return { status: 400, message: '인증번호가 일치하지 않습니다.' };
+      }
+
+      const tempUser = await this.authRepository.findTempUserByEmail(email);
+      if (!tempUser) {
+        return { status: 400, message: '가입 요청을 찾을 수 없습니다.' };
+      }
+
+      const user = await this.authRepository.createUser(tempUser);
+
+      await this.authRepository.deleteTempUser(email);
+      await this.authRepository.deleteEmailRecords(email);
+
+      return { status: 200, message: '이메일이 성공적으로 인증되었습니다.' };
+    } catch (error) {
+      console.error("Error:", error);
+      return { status: 500, message: '이메일 인증 중 오류가 발생했습니다.' };
+    }
+  };
+  // verifyEmail = async(verificationCode, email) => {
+     
+  //    const record = await this.authRepository.findLatestEmailRecord(email);
+    
+  //   try {
+   
+  //     if (!record || record.verificationCode !== parseInt(verificationCode, 10)) {
+  //       return res.status(400).json({ message: '인증번호가 일치하지 않습니다.' });
+  //     }
+  
+  //     const tempUser = await this.authRepository.findTempUserByEmail(email);
+  
+  //     if (!tempUser) {
+  //       return res.status(400).json({ message: '가입 요청을 찾을 수 없습니다.' });
+  //     }
+  
+  //     const user= await this.authRepository.createUser(tempUser);
+      
+  //     await this.authRepository.deleteTempUser(email);
+  //     await this.authRepository.deleteEmailRecords(email);
+  
+  //     res.status(200).json({ message: '이메일이 성공적으로 인증되었습니다.' });
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //     res.status(500).json({ message: '이메일 인증 중 오류가 발생했습니다.' });
+  //   }
+  // }
+
+  deleteUser = async(userId)=>{
+    await this.authRepository.deleteUser(userId);
   }
         
     }
