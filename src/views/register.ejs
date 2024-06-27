@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원가입</title>
+  <style>
+    * {
+      font-family: "Poor Story", system-ui;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #FFBB9E;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+
+    h2 {
+      margin-bottom: 1.5rem;
+      text-align: center;
+      color: #333;
+    }
+
+    h5 {
+      margin-bottom: 1.5rem;
+      text-align: center;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+
+    input:focus {
+      border-color: #C5AECF;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      background-color: #C5AECF;
+      border: none;
+      border-radius: 4px;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #C5AECF;
+    }
+
+    button:focus {
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>회원가입</h2>
+    <input id="name" type="text" placeholder="이름" /><br />
+    <input id="email" type="email" placeholder="이메일" /><br />
+    <input id="password" type="password" placeholder="비밀번호" /><br />
+    <input id="passwordConfirm" type="password" placeholder="비밀번호 확인" /><br />
+    <button id="registerBtn">가입하기</button>
+    <br />
+    <br />
+    <input id="verificationCode" type="text" placeholder="인증 코드" style="display:none;" /><br />
+    <button id="verifyBtn" style="display:none;">인증하기</button>
+  </div>
+  <script>
+    const name = document.querySelector("#name");
+    const email = document.querySelector("#email");
+    const password = document.querySelector("#password");
+    const passwordConfirm = document.querySelector("#passwordConfirm");
+    const registerBtn = document.querySelector("#registerBtn");
+    const verificationCode = document.querySelector("#verificationCode");
+    const verifyBtn = document.querySelector("#verifyBtn");
+    
+    registerBtn.addEventListener("click", register);
+    verifyBtn.addEventListener("click", verify);
+
+    function register() {
+      const req = {
+        name: name.value,
+        email: email.value,
+        password: password.value,
+        passwordConfirm: passwordConfirm.value,
+      };
+      fetch("/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(req),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 201) {
+          alert(data.data.message);
+          // 인증 코드를 입력받을 수 있도록 인증 코드 입력 필드와 버튼을 표시합니다.
+          verificationCode.style.display = "block";
+          verifyBtn.style.display = "block";
+        } else {
+          alert(data.data.message);
+        }
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        alert("회원가입 중 오류가 발생했습니다.");
+      });
+    }
+
+    function verify() {
+      const req = {
+        email:email.value,
+        verificationCode: verificationCode.value,
+      };
+      fetch(`/api/auth/register/verify-email`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(req),
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 200) {
+          alert(data.message);
+          // 이메일 인증 성공 후 리다이렉트 (예: 로그인 페이지로)
+          window.location.href = "/api/auth/login";
+        }else {
+          alert(data.message);
+        }
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        alert("이메일  오류가 발생했습니다.");
+      });
+    }
+  </script>
+</body>
+</html>

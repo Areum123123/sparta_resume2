@@ -9,19 +9,19 @@ datasource db {
   url      = env("DATABASE_URL")
   
 }
-
- model Users {
+model Users {
   userId    Int  @id @default(autoincrement()) @map("userId")
   name      String   @map("name")
   email     String   @unique  @map("email")
   password  String   @map("password")
   role      Role     @default(APPLICANT) @map("role")
-
+ 
   createdAt DateTime @default(now()) @map("createdAt")
   updatedAt DateTime @updatedAt  @map("updatedAt")
 
   Resumes Resumes[]
   RefreshToken RefreshToken?
+  Posts Posts[]
 
   @@map("Users")
  }
@@ -29,6 +29,20 @@ datasource db {
  enum Role {
      APPLICANT
      RECRUITER
+ }
+
+ model Posts {
+  postId  Int  @id @default(autoincrement()) @map("postId")
+  UserId  Int  @map("UserId")
+  title  String @map("title")
+  content String @map("content") @db.Text
+
+  createdAt DateTime @default(now()) @map("createdAt")
+  updatedAt DateTime @updatedAt  @map("updatedAt")
+ 
+ Comments Comments[]
+ User Users @relation(fields: [UserId], references:[userId],onDelete:Cascade)
+@@map("Posts")
  }
 
 model Resumes{
@@ -57,6 +71,19 @@ FINAL_PASS
 
 }
 
+model Comments {
+  commentId       Int     @id @default(autoincrement()) @map("commentId")
+  UserId          Int     @map("UserId")
+  PostId         Int     @map("PostId")
+  content         String    @map("content")
+
+createdAt DateTime @default(now()) @map("createdAt")
+updatedAt DateTime @updatedAt  @map("updatedAt")
+
+post Posts @relation(fields:[PostId], references:[postId], onDelete:Cascade)
+@@map("Comments")
+}
+
 model RefreshToken {
   Id       Int     @id @default(autoincrement()) @map("Id")
  UserId    Int  @unique   @map("UserId")
@@ -69,3 +96,23 @@ updatedAt DateTime @updatedAt  @map("updatedAt")
   User Users @relation(fields:[UserId], references: [userId], onDelete:Cascade)
   @@map("RefreshToken")
   }
+
+  model Email {
+  verificationCode Int      @unique
+  email            String
+  createdAt        DateTime @default(now())
+
+  @@map("email")
+}
+
+
+
+model TempUsers {
+  email     String @id
+  name      String
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+ 
