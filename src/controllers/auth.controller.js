@@ -28,7 +28,7 @@ export class AuthController{
         res.header('accessToken', accessToken);
         res.header('refreshToken', refreshToken);
 
-        return res.status(HTTP_STATUS.OK).json({ accessToken, refreshToken });
+        return res.status(HTTP_STATUS.OK).json({status:HTTP_STATUS.OK, accessToken, refreshToken });
   }catch(err){
     next(err)
   }

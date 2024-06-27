@@ -14,6 +14,11 @@ authRouter.get('/register', (req, res) => {
   res.render('register');//app.set views 설정 그안에 /register.ejs 폴더
 });
 
+//로그인 페이지 렌더링
+authRouter.get('/login', (req, res) => {
+  res.render('login');//app.set views 설정 그안에 /register.ejs 폴더
+});
+
 
 
 
