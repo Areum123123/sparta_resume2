@@ -41,7 +41,9 @@ yarn dev
 # GROWTH 
 
 -회원가입 이메일 인증 API [✔︎]
+
 -게시판, 댓글 api추가 구현 [✔︎]
+
 -게시판,댓글 3-Layered Architecture 리팩토링 [ ]
  
   
