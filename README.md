@@ -38,6 +38,12 @@ yarn dev
 * 이력서 수정
 * 이력서 삭제
 
+# GROWTH 
+
+-회원가입 이메일 인증 API [✔︎]
+-게시판, 댓글 api추가 구현 [✔︎]
+-게시판,댓글 3-Layered Architecture 리팩토링 [ ]
+ 
   
 -인증 미들 웨어       [ ]
 
